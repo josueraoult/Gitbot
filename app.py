@@ -1,70 +1,98 @@
-from fastapi import FastAPI, Request, Response
-from pydantic import BaseModel
-from typing import List
+from flask import Flask, request, jsonify
+from pymessenger import Bot
+import requests
+import openai
+import os
 import uvicorn
 import httpx
-import os
 
-class WebhookRequestData(BaseModel):
-    object: str = ""
-    entry: List = []
+# Configurez votre token secret pour la vérification
+WEBHOOK_VERIFY_TOKEN = ''
 
-def send_message(
-    page_access_token: str,
-    recipient_id: str,
-    message_text: str,
-    message_type: str = "UPDATE",
-):
-    r = httpx.post(
-        "https://graph.facebook.com/v2.6/me/messages",
-        params={"access_token": page_access_token},
-        headers={"Content-Type": "application/json"},
-        json={
-            "recipient": {"id": recipient_id},
-            "message": {"text": message_text},
-            "messaging_type": message_type,
-        },
+# Configurez votre clé d'API pour pymessenger
+ACCESS_TOKEN = 'EAAJ3opZCZBh4MBO4PQgzmxYllgslFvVXYsZApczTQWnfYAZCUXpAF1HZBiw7dZAovZBBCvAx9wCZB5J8AFq9Xtx2xCM4j2sQULYRFbUnt5Wdt9wbB6ajVA0SWs1y0sgtdE84L9tsMxv7WOmS2WoRTab4pSZBUgWSDv1hwg42BTfwLQsfbxGlmIZBwe6tPjN0R6FPqe'  # Remplacez par votre propre token
+
+# Configurez votre clé d'API pour OpenAI GPT-3.5-turbo
+OPENAI_API_KEY = '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'  # Remplacez par votre propre clé
+
+# Initialisez le client pymessenger
+bot = Bot(ACCESS_TOKEN)
+
+# Configurez la clé d'API OpenAI
+openai.api_key = OPENAI_API_KEY
+
+app = Flask(__name__)
+
+# Endpoint pour vérifier le token lors de la configuration du webhook
+@app.route('/webhook', methods=['GET'])
+def verify_token():
+    token_sent = request.args.get("hub.verify_token")
+    return verify_fb_token(token_sent)
+
+# Endpoint principal pour recevoir les messages du webhook de Messenger
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    data = request.get_json()
+    if data['object'] == 'page':
+        for entry in data['entry']:
+            for messaging_event in entry['messaging']:
+                if messaging_event.get('postback'):
+                    # Si l'utilisateur clique sur "Get Started"
+                    if messaging_event['postback']['payload'] == 'GET_STARTED_PAYLOAD':
+                        sender_id = messaging_event['sender']['id']
+                        send_welcome_messages(sender_id)
+                elif messaging_event.get('message'):
+                    gestionnaire_messages(messaging_event)
+    return "OK", 200
+
+def verify_fb_token(token_sent):
+    if token_sent == WEBHOOK_VERIFY_TOKEN:
+        return request.args.get("hub.challenge")
+    else:
+        return 'Token non valide'
+
+def envoyer_message_texte(sender_id, message):
+    bot.send_text_message(sender_id, message)
+
+def obtenir_reponse_openai(texte_utilisateur):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": texte_utilisateur},
+        ]
     )
-    r.raise_for_status()
+    return response['choices'][0]['message']['content']
 
-app = FastAPI()
+def repondre_message(sender_id, message_text):
+    reponse_openai = obtenir_reponse_openai(message_text)
+    envoyer_message_texte(sender_id, reponse_openai)
 
-# Endpoints.
-@app.get("/api/webhook")
-async def verify(request: Request):
-    if request.query_params.get("hub.mode") == "subscribe" and request.query_params.get(
-        "hub.challenge"
-    ):
-        if (
-            not request.query_params.get("hub.verify_token")
-            == os.environ.get("2c361288a69c0c40ef760e2c4aa007f4")
-        ):
-            return Response(content="Verification token mismatch", status_code=403)
-        return Response(content=request.query_params["hub.challenge"])
+def gestionnaire_messages(message):
+    sender_id = message['sender']['id']
+    message_text = message['message']['text']
+    repondre_message(sender_id, message_text)
 
-    return Response(content="Required arguments haven't passed.", status_code=400)
+def set_get_started_button():
+    url = f'https://graph.facebook.com/v12.0/me/messenger_profile?access_token={ACCESS_TOKEN}'
+    payload = {
+        "get_started": {
+            "payload": "GET_STARTED_PAYLOAD"
+        }
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
 
-@app.post("/api/webhook")
-async def webhook(data: WebhookRequestData):
-    if data.object == "page":
-        for entry in data.entry:
-            messaging_events = [
-                event for event in entry.get("messaging", []) if event.get("message")
-            ]
-            for event in messaging_events:
-                message = event.get("message")
-                sender_id = event["sender"]["id"]
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.text)
 
-                send_message(
-                    page_access_token=os.environ.get("EAAJ3opZCZBh4MBO4PQgzmxYllgslFvVXYsZApczTQWnfYAZCUXpAF1HZBiw7dZAovZBBCvAx9wCZB5J8AFq9Xtx2xCM4j2sQULYRFbUnt5Wdt9wbB6ajVA0SWs1y0sgtdE84L9tsMxv7WOmS2WoRTab4pSZBUgWSDv1hwg42BTfwLQsfbxGlmIZBwe6tPjN0R6FPqe"),
-                    recipient_id=sender_id,
-                    message_text=f"Received: {message['text']}",
-                )
+def send_welcome_messages(user_id):
+    envoyer_message_texte(user_id, "Bienvenue, je suis Nakama Bot.")
+    envoyer_message_texte(user_id, "Veuillez entrer votre question.")
 
-    return Response(content="ok")
+# Utilisez cette fonction pour définir le bouton "Get Started"
+set_get_started_button()
 
-def main():
-    uvicorn.run(app=app)
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
