@@ -2,7 +2,7 @@ from flask import Flask, request
 import requests
 from googletrans import Translator
 
-app = Flask(__name__)
+app = Flask(__bot__)
 
 PAGE_ACCESS_TOKEN = "EAAJ3opZCZBh4MBO4PQgzmxYllgslFvVXYsZApczTQWnfYAZCUXpAF1HZBiw7dZAovZBBCvAx9wCZB5J8AFq9Xtx2xCM4j2sQULYRFbUnt5Wdt9wbB6ajVA0SWs1y0sgtdE84L9tsMxv7WOmS2WoRTab4pSZBUgWSDv1hwg42BTfwLQsfbxGlmIZBwe6tPjN0R6FPqe"
 VERIFY_TOKEN = "2c361288a69c0c40ef760e2c4aa007f4"
