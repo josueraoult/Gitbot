@@ -1,1 +1,6 @@
-
+aiohttp
+fastapi
+gunicorn
+httpx
+pydantic
+uvicorn
