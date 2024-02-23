@@ -48,7 +48,7 @@ async def verify(request: Request):
     ):
         if (
             not request.query_params.get("hub.verify_token")
-            == os.environ["VERIFY_TOKEN"]
+            == os.environ["2c361288a69c0c40ef760e2c4aa007f4"]
         ):
             return Response(content="Verification token mismatch", status_code=403)
         return Response(content=request.query_params["hub.challenge"])
@@ -71,7 +71,7 @@ async def webhook(data: WebhookRequestData):
                 sender_id = event["sender"]["id"]
 
                 await send_message(
-                    page_access_token=os.environ["PAGE_ACCESS_TOKEN"],
+                    page_access_token=os.environ["EAAJ3opZCZBh4MBO4PQgzmxYllgslFvVXYsZApczTQWnfYAZCUXpAF1HZBiw7dZAovZBBCvAx9wCZB5J8AFq9Xtx2xCM4j2sQULYRFbUnt5Wdt9wbB6ajVA0SWs1y0sgtdE84L9tsMxv7WOmS2WoRTab4pSZBUgWSDv1hwg42BTfwLQsfbxGlmIZBwe6tPjN0R6FPqe"],
                     recipient_id=sender_id,
                     message_text=f"Received: {message['text']}",
                 )
@@ -81,7 +81,7 @@ async def webhook(data: WebhookRequestData):
 
 def main():
     if "VERIFY_TOKEN" in os.environ:
-        print("your verify token is: ", os.environ["VERIFY_TOKEN"])
+        print("your verify token is: ", os.environ["2c361288a69c0c40ef760e2c4aa007f4"])
     uvicorn.run(app=app)
 
 
