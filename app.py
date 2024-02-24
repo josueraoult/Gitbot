@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from pymessenger import app
+from pymessenger import Bot
 import requests
 import openai
 import os
@@ -21,7 +21,7 @@ bot = Bot(ACCESS_TOKEN)
 # Configurez la clé d'API OpenAI
 openai.api_key = OPENAI_API_KEY
 
-app = Flask(__bot__)
+app = Flask(__app__)
 
 # Endpoint pour vérifier le token lors de la configuration du webhook
 @app.route('/webhook', methods=['GET'])
