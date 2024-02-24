@@ -9,7 +9,7 @@ import hmac
 import hashlib
 
 # Configurez votre token secret pour la vérification
-WEBHOOK_VERIFY_TOKEN = '846a81b9b20ded5068e0cc97aa40593f'
+WEBHOOK_VERIFY_TOKEN = 'anythings'
 
 # Configurez votre clé d'API pour pymessenger
 ACCESS_TOKEN = 'EAAJ3opZCZBh4MBO4PQgzmxYllgslFvVXYsZApczTQWnfYAZCUXpAF1HZBiw7dZAovZBBCvAx9wCZB5J8AFq9Xtx2xCM4j2sQULYRFbUnt5Wdt9wbB6ajVA0SWs1y0sgtdE84L9tsMxv7WOmS2WoRTab4pSZBUgWSDv1hwg42BTfwLQsfbxGlmIZBwe6tPjN0R6FPqe'  # Remplacez par votre propre token
