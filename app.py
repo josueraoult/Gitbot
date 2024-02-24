@@ -5,6 +5,8 @@ import openai
 import os
 import uvicorn
 import httpx
+import hmac
+import hashlib
 
 # Configurez votre token secret pour la vérification
 WEBHOOK_VERIFY_TOKEN = '846a81b9b20ded5068e0cc97aa40593f'
@@ -93,6 +95,16 @@ def send_welcome_messages(user_id):
 
 # Utilisez cette fonction pour définir le bouton "Get Started"
 set_get_started_button()
+
+def generate_appsecret_proof(access_token, app_secret):
+    hmac_obj = hmac.new(app_secret.encode(), msg=access_token.encode(), digestmod=hashlib.sha256)
+    return hmac_obj.hexdigest()
+
+# Utilisation :
+access_token = "votre_access_token"
+app_secret = "votre_app_secret"
+appsecret_proof = generate_appsecret_proof(access_token, app_secret)
+print(appsecret_proof)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
