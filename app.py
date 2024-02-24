@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
-from pymessenger
-import app
+from pymessenger import app
 import requests
 import openai
 import os
