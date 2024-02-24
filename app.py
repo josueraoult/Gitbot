@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
-from pymessenger import Bot
+from pymessenger
+import app
 import requests
 import openai
 import os
@@ -94,5 +95,5 @@ def send_welcome_messages(user_id):
 # Utilisez cette fonction pour définir le bouton "Get Started"
 set_get_started_button()
 
-if __bot__ == '__main__':
+if __app__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
