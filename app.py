@@ -21,7 +21,7 @@ bot = Bot(ACCESS_TOKEN)
 # Configurez la clé d'API OpenAI
 openai.api_key = OPENAI_API_KEY
 
-app = Flask(__app__)
+app = Flask(__name__)
 
 # Endpoint pour vérifier le token lors de la configuration du webhook
 @app.route('/webhook', methods=['GET'])
@@ -94,5 +94,5 @@ def send_welcome_messages(user_id):
 # Utilisez cette fonction pour définir le bouton "Get Started"
 set_get_started_button()
 
-if __app__ == '__main__':
+if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
