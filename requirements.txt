@@ -4,3 +4,4 @@ gunicorn
 httpx
 pydantic
 uvicorn
+flask
