@@ -62,7 +62,7 @@ def envoyer_message_texte(sender_id, message):
     bot.send_text_message(sender_id, message)
 
 #open ai 
-def obtenir_reponse_openai(texte_utilisateur):
+    def obtenir_reponse_openai(texte_utilisateur):
     try:
         response = openai.Completion.create(
             engine="text-davinci-003",
