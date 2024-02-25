@@ -1,8 +1,5 @@
-aiohttp
-fastapi
 gunicorn
 httpx
-pydantic
 uvicorn
 Flask
 pymessenger
