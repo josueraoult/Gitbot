@@ -1,7 +1,4 @@
-gunicorn
-httpx
-uvicorn
 Flask
 pymessenger
 requests
-openai==1.0.0
+openai
