@@ -64,18 +64,17 @@ def envoyer_message_texte(sender_id, message):
 #open ai 
 def obtenir_reponse_openai(texte_utilisateur):
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": texte_utilisateur},
-            ]
+        response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt="You are a helpful assistant.\nUser: " + texte_utilisateur,
+            temperature=0.7,
+            max_tokens=150
         )
-        return response['choices'][0]['message']['content']
+        return response.choices[0].text.strip()
     except Exception as e:
         print("Une erreur s'est produite lors de la requête OpenAI:", e)
         return "Désolé, je ne peux pas répondre à cela pour le moment."
-        
+
 def repondre_message(sender_id, message_text):
     reponse_openai = obtenir_reponse_openai(message_text)
     envoyer_message_texte(sender_id, reponse_openai)
