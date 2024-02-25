@@ -7,7 +7,7 @@ import openai
 WEBHOOK_VERIFY_TOKEN = 'nakama'
 
 # Configurez votre clé d'API pour pymessenger
-ACCESS_TOKEN = 'EAAPPGL8wMRIBOx3b6igx3apEa6EDOXsqGzGN7mgDkQDOE8ZAZBBbSCVqAAzyTVJZAEZBYOCWYjaQvSJ0s3WGfMIOnqEUclrQEz6CjvwBHAhzyXlZABZANq4fSZBeYTS91AZASmJZA5cBYCRXQeBTf0xZCmBfstIbrHXh2J5AHZCVZCZBkOI4vP00DcnL8AtSUMAkHyJ8p'  # Remplacez par votre propre token
+ACCESS_TOKEN = 'EAAPPGL8wMRIBO7ZCwR1jMAnEREGrkUymWYYDGCoco2bilnrSlAQsh0ZAFO2DGoZCfZBhwh9nwA9ZCEAgM2SlmXomcP7bZCEgFCAz0NoIhTSxlxYq4Nb2pWQPlq5NYjhRf8xwbr1RYM8hf6t3ehwBZBvg2H4tYQEwQa4ZBve9BpKHjzXdBkbP5ZB9El3PEx57NQiFO'  # Remplacez par votre propre token
 
 # Configurez votre clé d'API pour OpenAI GPT-3.5-turbo
 OPENAI_API_KEY = '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'  # Remplacez par votre propre clé
