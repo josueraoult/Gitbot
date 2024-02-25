@@ -2,20 +2,15 @@ from flask import Flask, request, jsonify
 from pymessenger import Bot
 import requests
 import openai
-import os
-import uvicorn
-import httpx
-import hmac
-import hashlib
 
 # Configurez votre token secret pour la vérification
-WEBHOOK_VERIFY_TOKEN = 'anythings'
+WEBHOOK_VERIFY_TOKEN = 'nakama'
 
 # Configurez votre clé d'API pour pymessenger
-ACCESS_TOKEN = 'EAAJ3opZCZBh4MBO4PQgzmxYllgslFvVXYsZApczTQWnfYAZCUXpAF1HZBiw7dZAovZBBCvAx9wCZB5J8AFq9Xtx2xCM4j2sQULYRFbUnt5Wdt9wbB6ajVA0SWs1y0sgtdE84L9tsMxv7WOmS2WoRTab4pSZBUgWSDv1hwg42BTfwLQsfbxGlmIZBwe6tPjN0R6FPqe'  # Remplacez par votre propre token
+ACCESS_TOKEN = 'EAAPPGL8wMRIBO8Rdr0tchkyO0wFumTmM2Y5nvR1HgjXq8X140ZAOvpPbZCm6cWoeINNw7VbX0qOZACEpv6bmQUbFU27qLGdBecAalluSEgq0dKPublihAIYpTylLZAb8VmTqlI8S6d2xZAUnX0L4wO7W55kuV44OrXv625gW0wZAOEx76dCtt63hTQnPBkkz57'  # Remplacez par votre propre token
 
 # Configurez votre clé d'API pour OpenAI GPT-3.5-turbo
-OPENAI_API_KEY = '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'  # Remplacez par votre propre clé
+OPENAI_API_KEY = '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'  # Remplacez par votre propre clé
 
 # Initialisez le client pymessenger
 bot = Bot(ACCESS_TOKEN)
@@ -25,14 +20,24 @@ openai.api_key = OPENAI_API_KEY
 
 app = Flask(__name__)
 
+#code
+@app.route("/", methods=['GET'])
+def fbverify():
+    if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
+        if not request.args.get("hub.verify_token")==WEBHOOK_VERIFY_TOKEN:
+            return "Verification token mismatch", 403
+        return request.args['hub.challenge'], 200
+    return "Hello world", 200
+
 # Endpoint pour vérifier le token lors de la configuration du webhook
-@app.route('/webhook', methods=['GET'])
+@app.route('/', methods=['GET'])
 def verify_token():
     token_sent = request.args.get("hub.verify_token")
     return verify_fb_token(token_sent)
 
+
 # Endpoint principal pour recevoir les messages du webhook de Messenger
-@app.route('/webhook', methods=['POST'])
+@app.route('/', methods=['POST'])
 def webhook():
     data = request.get_json()
     if data['object'] == 'page':
@@ -43,7 +48,7 @@ def webhook():
                     if messaging_event['postback']['payload'] == 'GET_STARTED_PAYLOAD':
                         sender_id = messaging_event['sender']['id']
                         send_welcome_messages(sender_id)
-                elif messaging_event.get('message'):
+                elif messaging_event.get('message') and messaging_event['message'].get('text'):
                     gestionnaire_messages(messaging_event)
     return "OK", 200
 
@@ -57,14 +62,18 @@ def envoyer_message_texte(sender_id, message):
     bot.send_text_message(sender_id, message)
 
 def obtenir_reponse_openai(texte_utilisateur):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": texte_utilisateur},
-        ]
-    )
-    return response['choices'][0]['message']['content']
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": texte_utilisateur},
+            ]
+        )
+        return response['choices'][0]['message']['content']
+    except Exception as e:
+        print("Une erreur s'est produite lors de la requête OpenAI:", e)
+        return "Désolé, je ne peux pas répondre à cela pour le moment."
 
 def repondre_message(sender_id, message_text):
     reponse_openai = obtenir_reponse_openai(message_text)
@@ -90,21 +99,12 @@ def set_get_started_button():
     print(response.text)
 
 def send_welcome_messages(user_id):
-    envoyer_message_texte(user_id, "Bienvenue, je suis Nakama Bot.")
-    envoyer_message_texte(user_id, "Veuillez entrer votre question.")
+    envoyer_message_texte(user_id, "Bienvenue, je suis Speed 🤨.")
+    envoyer_message_texte(user_id, "Veuillez entrer votre question 😉.")
 
 # Utilisez cette fonction pour définir le bouton "Get Started"
 set_get_started_button()
 
-def generate_appsecret_proof(access_token, app_secret):
-    hmac_obj = hmac.new(app_secret.encode(), msg=access_token.encode(), digestmod=hashlib.sha256)
-    return hmac_obj.hexdigest()
-
-# Utilisation :
-access_token = "votre_access_token"
-app_secret = "votre_app_secret"
-appsecret_proof = generate_appsecret_proof(access_token, app_secret)
-print(appsecret_proof)
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
+    
