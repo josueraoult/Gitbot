@@ -10,7 +10,7 @@ WEBHOOK_VERIFY_TOKEN = 'nakama'
 ACCESS_TOKEN = 'EAAPPGL8wMRIBOx3b6igx3apEa6EDOXsqGzGN7mgDkQDOE8ZAZBBbSCVqAAzyTVJZAEZBYOCWYjaQvSJ0s3WGfMIOnqEUclrQEz6CjvwBHAhzyXlZABZANq4fSZBeYTS91AZASmJZA5cBYCRXQeBTf0xZCmBfstIbrHXh2J5AHZCVZCZBkOI4vP00DcnL8AtSUMAkHyJ8p'  # Remplacez par votre propre token
 
 # Configurez votre clé d'API pour OpenAI GPT-3.5-turbo
-OPENAI_API_KEY = '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'  # Remplacez par votre propre clé
+OPENAI_API_KEY = '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'  # Remplacez par votre propre clé
 
 # Initialisez le client pymessenger
 bot = Bot(ACCESS_TOKEN)
