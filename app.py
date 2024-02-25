@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from pymessenger import Bot
 import requests
 import openai
-
+import http.client
 # Configurez votre token secret pour la vérification
 WEBHOOK_VERIFY_TOKEN = 'nakama'
 
@@ -105,6 +105,31 @@ def send_welcome_messages(user_id):
 # Utilisez cette fonction pour définir le bouton "Get Started"
 set_get_started_button()
 
+def call_api(text, user_id):
+    conn = http.client.HTTPSConnection("aeona3.p.rapidapi.com")
+
+    headers = {
+        'X-RapidAPI-Key': "0aec34de62msh666934268b29f7cp1a34e7jsnc7771e789c31",
+        'X-RapidAPI-Host': "aeona3.p.rapidapi.com"
+    }
+
+    query_params = f"/?text={text}&userId={user_id}"
+
+    conn.request("GET", query_params, headers=headers)
+
+    res = conn.getresponse()
+    data = res.read()
+
+    return data.decode("utf-8")
+
+# Endpoint pour appeler l'API
+@app.route('/call_api', methods=['GET'])
+def api_endpoint():
+    text = request.args.get('text')
+    user_id = request.args.get('userId')
+    response = call_api(text, user_id)
+    return response, 200
+    
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
     
