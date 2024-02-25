@@ -61,6 +61,7 @@ def verify_fb_token(token_sent):
 def envoyer_message_texte(sender_id, message):
     bot.send_text_message(sender_id, message)
 
+#open ai 
 def obtenir_reponse_openai(texte_utilisateur):
     try:
         response = openai.ChatCompletion.create(
@@ -74,7 +75,7 @@ def obtenir_reponse_openai(texte_utilisateur):
     except Exception as e:
         print("Une erreur s'est produite lors de la requête OpenAI:", e)
         return "Désolé, je ne peux pas répondre à cela pour le moment."
-
+        
 def repondre_message(sender_id, message_text):
     reponse_openai = obtenir_reponse_openai(message_text)
     envoyer_message_texte(sender_id, reponse_openai)
