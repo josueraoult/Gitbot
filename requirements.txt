@@ -1,5 +1,5 @@
 Flask
 pymessenger
 requests
-openai==0.28
+openai
 gunicorn
