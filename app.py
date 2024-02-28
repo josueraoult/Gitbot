@@ -22,13 +22,13 @@ openai.api_key = OPENAI_API_KEY
 app = Flask(__name__)
 
 # Endpoint pour vérifier le token lors de la configuration du webhook
-@app.route('/webhook', methods=['GET'])
+@app.route('/', methods=['GET'])
 def verify_token():
     token_sent = request.args.get("hub.verify_token")
     return verify_fb_token(token_sent)
 
 # Endpoint principal pour recevoir les messages du webhook de Messenger
-@app.route('/webhook', methods=['POST'])
+@app.route('/', methods=['POST'])
 def webhook():
     data = request.get_json()
     if data['object'] == 'page':
@@ -60,7 +60,8 @@ def obtenir_reponse_openai(texte_utilisateur):
             {"role": "user", "content": texte_utilisateur},
         ]
     )
-return response['choices'][0]['message']['content']
+    return response['choices'][0]['message']['content']
+
 
 def repondre_message(sender_id, message_text):
     reponse_openai = obtenir_reponse_openai(message_text)
