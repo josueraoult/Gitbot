@@ -5,13 +5,13 @@ import openai
 import os
 
 # Configurez votre token secret pour la vérification
-WEBHOOK_VERIFY_TOKEN = 'secretkey'
+WEBHOOK_VERIFY_TOKEN = 'mywebhook'
 
 # Configurez votre clé d'API pour pymessenger
-ACCESS_TOKEN = 'EAAPPGL8wMRIBO56HZCroLDVYmYCvt4JwKv3sd4abp0ZBt0erZAW2i2XbIPrF2LDZBvTUHPvTehvjOAVUSk6JujlTAlEPmz7E9sJPh3n8embmb0u2j02wREwjMhua7ZACXzEr3BRkph3qQZBZA4czSFUyCraRVMrxnGnwSs87fZC2zOh5CEDdmOF7zjREi9XIHCEY'  # Remplacez par votre propre token
+ACCESS_TOKEN = 'EAAPPGL8wMRIBOwn8T9Gdjnuvko6sETi7iPfZB8Oq3Ldh1xaFdET4XwWpYgT6kySjPmXogLlOe8aN5qqfcr0QfLgJzZC4hZA8qvovYpRZAehZCEKXya0qhqLlxyUZC2siGtIGimZCvE9rKm559m42SOdr2gnror449RNoftS2jnUsaoKafZCTHNIC8ZAg1xyXBw8ZAf'  # Remplacez par votre propre token
 
 # Configurez votre clé d'API pour OpenAI GPT-3.5-turbo
-OPENAI_API_KEY = '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'  # Remplacez par votre propre clé
+OPENAI_API_KEY = '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'  # Remplacez par votre propre clé
 
 # Initialisez le client pymessenger
 bot = Bot(ACCESS_TOKEN)
@@ -42,7 +42,7 @@ def webhook():
                 elif messaging_event.get('message'):
                     gestionnaire_messages(messaging_event)
     return "OK", 200
-
+  
 def verify_fb_token(token_sent):
     if token_sent == WEBHOOK_VERIFY_TOKEN:
         return request.args.get("hub.challenge")
@@ -59,38 +59,5 @@ def obtenir_reponse_openai(texte_utilisateur):
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": texte_utilisateur},
         ]
-    )
-    return response['choices'][0]['message']['content']
-
-def repondre_message(sender_id, message_text):
-    reponse_openai = obtenir_reponse_openai(message_text)
-    envoyer_message_texte(sender_id, reponse_openai)
-
-def gestionnaire_messages(message):
-    sender_id = message['sender']['id']
-    message_text = message['message']['text']
-    repondre_message(sender_id, message_text)
-
-def set_get_started_button():
-    url = f'https://graph.facebook.com/v12.0/me/messenger_profile?access_token={ACCESS_TOKEN}'
-    payload = {
-        "get_started": {
-            "payload": "GET_STARTED_PAYLOAD"
-        }
-    }
-    headers = {
-        "Content-Type": "application/json"
-    }
-
-    response = requests.post(url, json=payload, headers=headers)
-    print(response.text)
-
-def send_welcome_messages(user_id):
-    envoyer_message_texte(user_id, "Bienvenue, je suis speed.")
-    envoyer_message_texte(user_id, "Veuillez entrer votre question.")
-
-# Utilisez cette fonction pour définir le bouton "Get Started"
-set_get_started_button()
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+                    )
+    
