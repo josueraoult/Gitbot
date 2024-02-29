@@ -1,5 +1,1 @@
-Flask
-pymessenger
-requests
-openai==1.0.0
-gunicorn
+pipreqs
