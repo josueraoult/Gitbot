@@ -2,3 +2,4 @@ pipreqs
 gunicorn
 Flask
 openai==0.28
+pymessenger
