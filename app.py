@@ -5,13 +5,13 @@ import openai
 import os
 
 # Configurez votre token secret pour la vérification
-WEBHOOK_VERIFY_TOKEN = 'mywebhook'
+WEBHOOK_VERIFY_TOKEN = 'EAAPPGL8wMRIBO8bee4EPS5IqPdQdaB35jH3hPgVIb28PZBEL5rU91XJ4qplxf8SP7DlIzr8KLn5XYjvtZBmaLZARGa3LI1cIC6ycEPSMaofGZC8mjxha2yG22LPPJEpPryGPlBcoe0V9eUNCKhAMZCic4pUPrUYPjBdWns5cZBNZCqHbWzCgW9QQ4f8aZB8SoFoc'
 
 # Configurez votre clé d'API pour pymessenger
-ACCESS_TOKEN = 'EAAPPGL8wMRIBOwn8T9Gdjnuvko6sETi7iPfZB8Oq3Ldh1xaFdET4XwWpYgT6kySjPmXogLlOe8aN5qqfcr0QfLgJzZC4hZA8qvovYpRZAehZCEKXya0qhqLlxyUZC2siGtIGimZCvE9rKm559m42SOdr2gnror449RNoftS2jnUsaoKafZCTHNIC8ZAg1xyXBw8ZAf'  # Remplacez par votre propre token
+ACCESS_TOKEN = 'EAAPPGL8wMRIBO8bee4EPS5IqPdQdaB35jH3hPgVIb28PZBEL5rU91XJ4qplxf8SP7DlIzr8KLn5XYjvtZBmaLZARGa3LI1cIC6ycEPSMaofGZC8mjxha2yG22LPPJEpPryGPlBcoe0V9eUNCKhAMZCic4pUPrUYPjBdWns5cZBNZCqHbWzCgW9QQ4f8aZB8SoFoc'  # Remplacez par votre propre token
 
 # Configurez votre clé d'API pour OpenAI GPT-3.5-turbo
-OPENAI_API_KEY = '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'  # Remplacez par votre propre clé
+OPENAI_API_KEY = 'c'  # Remplacez par votre propre clé
 
 # Initialisez le client pymessenger
 bot = Bot(ACCESS_TOKEN)
@@ -62,7 +62,6 @@ def obtenir_reponse_openai(texte_utilisateur):
     )
     return response['choices'][0]['message']['content']
 
-
 def repondre_message(sender_id, message_text):
     reponse_openai = obtenir_reponse_openai(message_text)
     envoyer_message_texte(sender_id, reponse_openai)
@@ -95,4 +94,3 @@ set_get_started_button()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
-                    
