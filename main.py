@@ -5,13 +5,13 @@ import openai
 import os
 
 # Configurez votre token secret pour la vérification
-WEBHOOK_VERIFY_TOKEN = 'EAAPPGL8wMRIBO8bee4EPS5IqPdQdaB35jH3hPgVIb28PZBEL5rU91XJ4qplxf8SP7DlIzr8KLn5XYjvtZBmaLZARGa3LI1cIC6ycEPSMaofGZC8mjxha2yG22LPPJEpPryGPlBcoe0V9eUNCKhAMZCic4pUPrUYPjBdWns5cZBNZCqHbWzCgW9QQ4f8aZB8SoFoc'
+WEBHOOK_VERIFY_TOKEN = 'your_verify_token_code'
 
 # Configurez votre clé d'API pour pymessenger
-ACCESS_TOKEN = 'EAAPPGL8wMRIBO8bee4EPS5IqPdQdaB35jH3hPgVIb28PZBEL5rU91XJ4qplxf8SP7DlIzr8KLn5XYjvtZBmaLZARGa3LI1cIC6ycEPSMaofGZC8mjxha2yG22LPPJEpPryGPlBcoe0V9eUNCKhAMZCic4pUPrUYPjBdWns5cZBNZCqHbWzCgW9QQ4f8aZB8SoFoc'  # Remplacez par votre propre token
+ACCESS_TOKEN = 'your_acces_token_api'  # Remplacez par votre propre token
 
 # Configurez votre clé d'API pour OpenAI GPT-3.5-turbo
-OPENAI_API_KEY = 'c'  # Remplacez par votre propre clé
+OPENAI_API_KEY = 'your_open_ai_api_key'  # Remplacez par votre propre clé
 
 # Initialisez le client pymessenger
 bot = Bot(ACCESS_TOKEN)
@@ -86,8 +86,8 @@ def set_get_started_button():
     print(response.text)
 
 def send_welcome_messages(user_id):
-    envoyer_message_texte(user_id, "Bienvenue, je suis Nakama Bot.")
-    envoyer_message_texte(user_id, "Veuillez entrer votre question.")
+    envoyer_message_texte(user_id, "set_up_your_welcome_message")
+    envoyer_message_texte(user_id, "How can I help you today 🤷?")
 
 # Utilisez cette fonction pour définir le bouton "Get Started"
 set_get_started_button()
